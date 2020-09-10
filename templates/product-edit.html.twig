@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Product Edit</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <b>Product Edit Page</b>
+        <hr>
+        <label>Product Name</label><br>
+        <input type="text" id="productName" value="{{ name }}"><br>&nbsp;<br>
+        <label>Product Cost</label><br>
+        <input type="text" id="productCost" value="{{ cost }}"> coins<br>&nbsp;<br>
+        <hr>
+        <input type="button" name="backToList" value="CANCEL" onclick="return location.href = '/product';">
+        <input type="button" id="productSaveBtn" value="SAVE" onclick="onSaveAction()">
+
+        <script lang="JavaScript">
+            function onSaveAction() {
+                $("#productSaveBtn").prop('disabled', true);
+                let name = $("#productName").val();
+                if (name === '') {
+                    alert('Enter Name');
+                    $("#productSaveBtn").prop('disabled', false);
+                    return false;
+                }
+                let cost = $("#productCost").val();
+                if (cost === '') {
+                    alert('Enter Cost');
+                    $("#productSaveBtn").prop('disabled', false);
+                    return false;
+                }
+
+                $.ajax({
+                    url: "/product/{{ id }}",
+                    method: "PUT",
+                    data: {"name": name, "cost": cost},
+                    success: function(data) {
+                        $(location).attr('href','/product/');
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

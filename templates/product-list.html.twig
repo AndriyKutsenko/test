@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Products</title>
+        <style>
+            td {
+                padding-left: 10px;
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <b>Product List Page</b>
+        <hr>
+        <input type="button" name="addProduct" value="Add Product" onclick="return location.href = '/product/add';">|
+        <input type="text" id="searchStr" value="{% if productName is defined %}{{ productName }}{% endif %}">
+        <input type="button" name="searchProduct" value="SEARCH" onclick="onSearchAction()">
+        <input type="button" name="cleanSearch" value="X" onclick="return location.href = '/product';">
+        <hr>
+        <table>
+            <tr>
+                <td>DATE</td>
+                <td>NAME</td>
+                <td>COST</td>
+                <td>ACTIONS</td>
+            </tr>
+            {% for product in products %}
+                <tr>
+                    <td>{{ product.createdDate }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.cost }}</td>
+                    <td>
+                        <input type="button" name="editProduct" value="VIEW" onclick="return location.href = '/product/{{ product.id }}';">
+                        <input type="button" name="editProduct" value="EDIT" onclick="return location.href = '/product/{{ product.id }}/edit';">
+                        <input type="button" name="deleteProduct" value="DELETE" onclick="onDeleteAction({{ product.id }})">
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <script lang="JavaScript">
+            function onDeleteAction(productId) {
+                if (confirm("Do You Want Delete?")) {
+                    $.ajax({
+                        url: "/product/" + productId,
+                        method: "DELETE",
+                        success: function(data) {
+                            $(location).attr('href','/product/');
+                        }
+                    });
+                }
+            }
+            function onSearchAction() {
+                let searchStr = $("#searchStr").val();
+                if (searchStr === '') {
+                    alert('Enter Search String');
+                    return false;
+                }
+
+                $(location).attr('href','/product/search/' + searchStr);
+            }
+        </script>
+    </body>
+</html>

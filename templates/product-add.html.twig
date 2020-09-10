@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Product Add</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <b>Product Add Page</b>
+        <hr>
+        <label>Product Name</label><br>
+        <input type="text" id="productName" value="New Product"><br>&nbsp;<br>
+        <label>Product Cost</label><br>
+        <input type="text" id="productCost" value="0,00"> coins<br>&nbsp;<br>
+        <hr>
+        <input type="button" name="backToList" value="CANCEL" onclick="return location.href = '/product';">
+        <input type="button" id="productAddBtn" value="ADD" onclick="onAddAction()">
+
+        <script lang="JavaScript">
+            function onAddAction() {
+                $("#productAddBtn").prop('disabled', true);
+                let name = $("#productName").val();
+                if (name === '') {
+                    alert('Enter Name');
+                    $("#productAddBtn").prop('disabled', false);
+                    return false;
+                }
+                let cost = $("#productCost").val();
+                if (cost === '') {
+                    alert('Enter Cost');
+                    $("#productAddBtn").prop('disabled', false);
+                    return false;
+                }
+
+                $.ajax({
+                    url: "/product/",
+                    method: "POST",
+                    data: {"name": name, "cost": cost},
+                    success: function(data) {
+                        $(location).attr('href','/product/');
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>
